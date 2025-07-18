@@ -1,0 +1,40 @@
+Package: SenegalSpatialFish
+Type: Package
+Title: Spatial Analysis of Fish Consumption in Senegal
+Version: 0.1.0
+Authors@R: 
+    person(
+      "Votre", "Nom", 
+      email = "votre@email.com",
+      role = c("aut", "cre"),
+      comment = c(ORCID = "0000-0000-0000-0000")  # Optionnel
+    )
+Description: Professional package for spatial analysis of fish consumption patterns
+    across Senegalese regions. Provides tools for geospatial data integration,
+    statistical mapping, hotspot detection, and interactive visualization.
+    Designed for researchers and policy analysts working on food security
+    and fisheries management.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports:
+    leaflet,
+    viridis,
+    purrr,
+    sf (>= 1.0.0),
+    dplyr (>= 1.0.0),
+    ggplot2 (>= 3.3.0),
+    stringr (>= 1.4.0),
+    haven (>= 2.3.0),
+    viridis (>= 0.6.0),
+    rlang (>= 0.4.0),
+    leaflet (>= 2.0.0),
+    spdep (>= 1.1.0),
+    tidyr (>= 1.1.0)
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown,
+    shiny
+RoxygenNote: 7.2.3
+VignetteBuilder: knitr
