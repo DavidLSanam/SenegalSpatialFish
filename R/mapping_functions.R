@@ -96,78 +96,54 @@ generate_spatial_map <- function(base_data,
 }
 
 
-
-#' Crée une carte interactive Leaflet pour visualiser une variable régionale
+#' Génère directement une carte interactive Leaflet à partir d'une base de consommation brute
 #'
-#' @param spatial_data Données spatialisées (objet `sf` avec géométrie)
-#' @param var Nom de la variable numérique à cartographier
-#' @param popup_vars Variables à afficher dans le popup (par défaut : nom de la région + var)
+#' @param base_data La base de consommation brute (avec région labellisée)
+#' @param shapefile_path Chemin vers le shapefile (optionnel si déjà intégré dans le package)
+#' @param variable Nom de la variable à cartographier (ex: "QuantiteConsommeeKG")
+#' @param popup_vars Variables à afficher dans les popups (ex: c("ValeurConsommee", "CaloriesParTete"))
 #' @param palette Palette de couleurs (ex: "YlOrRd", "Viridis", "Blues", etc.)
 #'
-#' @return Un objet leaflet
+#' @return Un objet leaflet (carte interactive)
 #' @export
-create_interactive_map <- function(spatial_data,
-                                   var,
-                                   popup_vars = NULL,
-                                   palette = "YlOrRd") {
+generate_interactive_map <- function(base_data,
+                                     shapefile_path = NULL,
+                                     variable = "QuantiteConsommeeKG",
+                                     popup_vars = c("ValeurConsommee", "CaloriesParTete"),
+                                     palette = "YlOrRd") {
 
-  # Vérifie les packages requis
-  pkgs <- c("leaflet", "sf", "viridis", "purrr")
-  lapply(pkgs, function(pkg) {
-    if (!requireNamespace(pkg, quietly = TRUE)) {
-      stop(sprintf("Le package '%s' est requis mais n'est pas installé.", pkg))
-    }
-  })
+  require_packages(c("sf", "dplyr", "stringr", "haven", "leaflet", "viridis", "purrr"))
 
-  # Reprojection en WGS84 (obligatoire pour leaflet)
-  spatial_data <- sf::st_transform(spatial_data, 4326)
+  # 1. Nettoyage des noms de région
+  base_data_clean <- base_data %>%
+    dplyr::mutate(region = haven::as_factor(region)) %>%
+    dplyr::mutate(region = as.character(region)) %>%
+    dplyr::mutate(region = stringr::str_replace_all(region, "-", " ")) %>%
+    dplyr::mutate(region = stringr::str_trim(toupper(region))) %>%
+    dplyr::filter(!is.na(region))
 
-  # Palette de couleurs
-  pal <- leaflet::colorNumeric(
-    palette = palette,
-    domain = spatial_data[[var]],
-    na.color = "transparent"
-  )
-
-  # Préparation du contenu des popups
-  if (is.null(popup_vars)) {
-    popup_content <- paste0(
-      "<strong>Région:</strong> ", spatial_data$region, "<br/>",
-      "<strong>", var, ":</strong> ", round(spatial_data[[var]], 2)
+  # 2. Agrégation régionale
+  regional_stats <- base_data_clean %>%
+    dplyr::group_by(region) %>%
+    dplyr::summarise(
+      QuantiteConsommeeKG = sum(QuantiteConsommeeKG, na.rm = TRUE),
+      ValeurConsommee = sum(ValeurConsommee, na.rm = TRUE),
+      CaloriesParTete = mean(CaloriesParTete, na.rm = TRUE),
+      .groups = "drop"
     )
-  } else {
-    popup_content <- purrr::map_chr(1:nrow(spatial_data), function(i) {
-      html <- paste0("<strong>", spatial_data$region[i], "</strong><br/>")
-      for (v in popup_vars) {
-        val <- spatial_data[[v]][i]
-        val <- ifelse(is.numeric(val), round(val, 2), val)
-        html <- paste0(html, "<strong>", v, ":</strong> ", val, "<br/>")
-      }
-      html
-    })
-  }
 
-  # Création de la carte
-  leaflet::leaflet(spatial_data) %>%
-    leaflet::addProviderTiles("CartoDB.Positron") %>%
-    leaflet::addPolygons(
-      fillColor = ~pal(spatial_data[[var]]),
-      fillOpacity = 0.8,
-      weight = 1,
-      color = "white",
-      opacity = 1,
-      popup = popup_content,
-      highlightOptions = leaflet::highlightOptions(
-        weight = 2,
-        color = "#666",
-        fillOpacity = 0.9,
-        bringToFront = TRUE
-      )
-    ) %>%
-    leaflet::addLegend(
-      pal = pal,
-      values = spatial_data[[var]],
-      position = "bottomright",
-      title = var
-    )
+  # 3. Chargement des formes géographiques
+  region_sf <- load_regional_shapes(path = shapefile_path)
+
+  # 4. Intégration
+  spatial_data <- integrate_data_with_shapes(regional_stats, region_sf)
+
+  # 5. Création de la carte interactive
+  return(create_interactive_map(
+    spatial_data,
+    var = variable,
+    popup_vars = popup_vars,
+    palette = palette
+  ))
 }
+
