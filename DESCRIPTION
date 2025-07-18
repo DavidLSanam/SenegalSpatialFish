@@ -38,3 +38,5 @@ Suggests:
     shiny
 RoxygenNote: 7.2.3
 VignetteBuilder: knitr
+URL: https://github.com/DavidLSanam/SenegalSpatialFish
+BugReports: https://github.com/DavidLSanam/SenegalSpatialFish/issues
