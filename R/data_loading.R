@@ -5,7 +5,7 @@
 #' @export
 load_regional_shapes <- function(path = NULL) {
   if (is.null(path)) {
-    path <- system.file("extdata", "Limite_Région.shp", package = "SenegalSpatialFish")
+    path <- system.file("extdata", "Limite_Region.shp", package = "SenegalSpatialFish")
   }
 
   if (!file.exists(path)) {
