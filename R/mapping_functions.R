@@ -111,7 +111,13 @@ create_interactive_map <- function(spatial_data,
                                    popup_vars = NULL,
                                    palette = "YlOrRd") {
 
-  require_packages(c("leaflet", "sf", "viridis"))
+  # Vérifie les packages requis
+  pkgs <- c("leaflet", "sf", "viridis", "purrr")
+  lapply(pkgs, function(pkg) {
+    if (!requireNamespace(pkg, quietly = TRUE)) {
+      stop(sprintf("Le package '%s' est requis mais n'est pas installé.", pkg))
+    }
+  })
 
   # Reprojection en WGS84 (obligatoire pour leaflet)
   spatial_data <- sf::st_transform(spatial_data, 4326)
@@ -165,4 +171,3 @@ create_interactive_map <- function(spatial_data,
       title = var
     )
 }
-
