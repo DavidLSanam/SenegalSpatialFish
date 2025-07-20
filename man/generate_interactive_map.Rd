@@ -2,30 +2,36 @@
 % Please edit documentation in R/mapping_functions.R
 \name{generate_interactive_map}
 \alias{generate_interactive_map}
-\title{Génère directement une carte interactive Leaflet à partir d'une base de consommation brute}
+\title{Génère une carte interactive à partir de données de consommation}
 \usage{
 generate_interactive_map(
   base_data,
   shapefile_path = NULL,
   variable = "QuantiteConsommeeKG",
-  popup_vars = c("ValeurConsommee", "CaloriesParTete"),
-  palette = "YlOrRd"
+  popup_vars = c("region", "ValeurConsommee", "CaloriesParTete"),
+  popup_labels = c("Région", "Valeur (F CFA)", "Calories Moyennes"),
+  palette = "YlOrRd",
+  legend_title = "Valeur"
 )
 }
 \arguments{
-\item{base_data}{La base de consommation brute (avec région labellisée)}
+\item{base_data}{Données brutes avec colonnes `region`}
 
-\item{shapefile_path}{Chemin vers le shapefile (optionnel si déjà intégré dans le package)}
+\item{shapefile_path}{Chemin vers un shapefile personnalisé}
 
-\item{variable}{Nom de la variable à cartographier (ex: "QuantiteConsommeeKG")}
+\item{variable}{Variable à représenter}
 
-\item{popup_vars}{Variables à afficher dans les popups (ex: c("ValeurConsommee", "CaloriesParTete"))}
+\item{popup_vars}{Colonnes pour popup}
 
-\item{palette}{Palette de couleurs (ex: "YlOrRd", "Viridis", "Blues", etc.)}
+\item{popup_labels}{Libellés pour popup}
+
+\item{palette}{Palette de couleurs}
+
+\item{legend_title}{Titre de la légende}
 }
 \value{
-Un objet leaflet (carte interactive)
+Un objet leaflet
 }
 \description{
-Génère directement une carte interactive Leaflet à partir d'une base de consommation brute
+Génère une carte interactive à partir de données de consommation
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/mapping_functions.R
 \name{generate_spatial_map}
 \alias{generate_spatial_map}
-\title{Génère directement une carte spatiale stylisée à partir d'une base de consommation brute}
+\title{Génère directement une carte spatiale stylisée}
 \usage{
 generate_spatial_map(
   base_data,
@@ -14,21 +14,21 @@ generate_spatial_map(
 )
 }
 \arguments{
-\item{base_data}{La base de consommation brute (avec région labellisée)}
+\item{base_data}{Base de consommation brute}
 
-\item{shapefile_path}{Chemin vers le shapefile (optionnel si déjà intégré dans le package)}
+\item{shapefile_path}{Chemin vers le shapefile}
 
-\item{variable}{Nom de la variable à cartographier (ex: "QuantiteConsommeeKG")}
+\item{variable}{Variable à cartographier}
 
-\item{palette}{Palette de couleurs viridis (ex: "plasma", "magma", etc.)}
+\item{palette}{Palette de couleurs viridis}
 
 \item{title}{Titre de la carte}
 
 \item{legend_title}{Titre de la légende}
 }
 \value{
-Un objet ggplot2 (la carte)
+Un ggplot2
 }
 \description{
-Génère directement une carte spatiale stylisée à partir d'une base de consommation brute
+Génère directement une carte spatiale stylisée
 }
