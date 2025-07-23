@@ -85,6 +85,7 @@ create_interactive_map() : Génère une carte interactive avancée avec leaflet.
 library(SenegalSpatialFish)
 
 # Charger la base brute
+setwd("chemin vers BASE_X1_Appuree.dta")
 df <- read_dta("BASE_X1_Appuree.dta") // Ou une base de même type depuis votre PC
 
 # Générer une carte interactive
@@ -92,13 +93,14 @@ map <- generate_interactive_map(
   df,
   variable = "QuantiteConsommeeKG",
   popup_vars = c("region", "ValeurConsommee", "CaloriesParTete"),
-  popup_labels = c("Région", "Valeur (F CFA)", "Calories Moyennes"),
+  popup_labels = c("Région", "Dépense de consommation (FCFA)", "Apport calorique moyen par tête"),
   palette = "plasma",
   legend_title = "Quantité consommée (kg)"
 )
+
 map
 
-#### Vous avez bien-sûr la possibilité de modifier le "popup_vars" selon la disponibilité des variables dans votre base et le "popup_labels" selon votre convenance.
+#### Vous avez bien-sûr la possibilité de modifier le "popup_labels" selon votre convenance.
 
 
 
