@@ -86,7 +86,7 @@ library(SenegalSpatialFish)
 
 # Charger la base brute
 setwd("chemin vers BASE_X1_Appuree.dta")
-df <- read_dta("BASE_X1_Appuree.dta") // Ou une base de même type depuis votre PC
+df <- read_dta("BASE_X1_Appuree.dta") # Ou une base de même type depuis votre PC
 
 # Générer une carte interactive
 map <- generate_interactive_map(
