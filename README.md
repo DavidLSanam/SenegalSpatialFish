@@ -100,6 +100,8 @@ map <- generate_interactive_map(
 
 map
 
+htmlwidgets::saveWidget(map, "carte_interactive.html")
+
 #### Vous avez bien-sûr la possibilité de modifier le "popup_labels" selon votre convenance.
 
 
